@@ -1,0 +1,48 @@
+im_path = '/media/zou/D/dataset/im0002.jpg'
+root = '/media/zou/D/dataset/mpii'
+
+# image_set = ('train','valid')
+def _get_db():
+    # create train/val split
+    file_name = os.path.join(
+        root, 'annot', 'valid.json'
+    )
+    # file_name = '/home/zhaoliming/pycharm_project/deep-high-resolution-net.pytorch/data/mpii/annot/valid.json'
+    # open()用于打开一个文件，创建一个file对象
+    # json.load(),load操作的是文件流,将其转化成Python对象
+    with open(file_name) as anno_file:
+        anno = json.load(anno_file)
+
+    gt_db = []
+    for a in anno:
+        image_name = a['image']
+        # image_dir = 'images.zip@' if data_format == 'zip' else 'images'
+        gt_db.append(
+            {
+                'image': os.path.join('/mnt/xudingning/HRNet/data/mpii', image_name),
+            }
+        )
+
+    return gt_db
+import os
+import json
+a = _get_db
+db = a()
+print('db',len(db))
+
+
+# logger.info('=> load {} samples'.format(len(db)))
+for i in range(len(db)):
+    print('i',i)
+    file_name = os.path.join(
+       root, 'annot',  'valid.json'
+    )
+    with open(file_name) as anno_file:
+        anno = json.load(anno_file)
+    image_name = anno[i]['image']
+    print('image_name',image_name)
+    image = Image.open(os.path.join('/media/zou/D/dataset/mpii/images/' + image_name))
+    image2 = image.resize((int(256), int(256)), Image.ANTIALIAS)
+    # os.path.join('/media/zou/D/low-lsp/' +image_name)
+    image2.save('/media/zou/D/low-valid_mpii/ '+ image_name)
+
